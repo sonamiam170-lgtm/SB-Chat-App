@@ -1,0 +1,103 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User account profile and presence information",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "username": { "type": "string", "minLength": 2, "maxLength": 30 },
+        "email": { "type": "string" },
+        "avatar": { "type": "string" },
+        "bio": { "type": "string", "maxLength": 160 },
+        "isOnline": { "type": "boolean" },
+        "isVerified": { "type": "boolean" },
+        "createdAt": { "type": "number" },
+        "lastSeen": { "type": "string" },
+        "isLocked": { "type": "boolean" },
+        "blockedUserIds": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["name", "username"]
+    },
+    "UsernameRecord": {
+      "title": "UsernameRecord",
+      "description": "Unique mapping of username handle to user UID",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["uid"]
+    },
+    "Conversation": {
+      "title": "Conversation",
+      "description": "One-to-one conversation between two registered users",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "participants": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "participantDetails": { "type": "object" },
+        "lastMessage": { "type": "object" },
+        "updatedAt": { "type": "number" },
+        "unreadCount": { "type": "object" },
+        "typing": { "type": "object" },
+        "isPinned": { "type": "object" },
+        "isMuted": { "type": "object" },
+        "disappearingTimer": { "type": "string" },
+        "customWallpaper": { "type": "string" }
+      },
+      "required": ["participants", "updatedAt"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Individual message inside a conversation",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "chatId": { "type": "string" },
+        "senderId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "senderUsername": { "type": "string" },
+        "text": { "type": "string" },
+        "image": { "type": "string" },
+        "voiceNote": { "type": "object" },
+        "timestamp": { "type": "number" },
+        "status": {
+          "type": "string",
+          "enum": ["sending", "sent", "delivered", "seen"]
+        },
+        "reactions": { "type": "object" },
+        "isStarred": { "type": "boolean" },
+        "replyTo": { "type": "object" },
+        "isDeleted": { "type": "boolean" }
+      },
+      "required": ["senderId", "chatId", "timestamp", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Public profile and online status for all registered messenger users"
+    },
+    "/usernames/{username}": {
+      "schema": "UsernameRecord",
+      "description": "Unique reservation index for lowercase username handles"
+    },
+    "/conversations/{conversationId}": {
+      "schema": "Conversation",
+      "description": "Conversations and recent chats index"
+    },
+    "/conversations/{conversationId}/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Real-time messages sent within a conversation"
+    }
+  }
+}

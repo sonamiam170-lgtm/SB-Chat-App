@@ -1,0 +1,11 @@
+{
+  "name": "Remix SB Profile Manager",
+  "description": "A modern, premium real-time messenger featuring secure chats, rich media sharing, audio/video calls, and profile customization.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
